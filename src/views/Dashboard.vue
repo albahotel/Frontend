@@ -51,3 +51,65 @@ const handleNewBooking = () => {
   console.log('Обработка новой брони')
 }
 </script>
+<style>
+/* Общие стили для скроллбаров */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(243, 244, 246, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.1);
+}
+
+/* Для Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* Специфичные стили для таблицы */
+tbody::-webkit-scrollbar {
+  width: 6px;
+}
+
+tbody::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+/* Стили для блока уведомлений */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 5px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #a5b4fc;
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #818cf8;
+}
+
+/* Плавный скролл */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Дополнительные улучшения для таблицы */
+tbody {
+  scrollbar-gutter: stable both-edges;
+}
+</style>
