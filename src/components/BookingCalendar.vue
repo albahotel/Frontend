@@ -1,6 +1,6 @@
 <template>
-  <section class="relative bg-stone-50 h-screen flex flex-col">
-    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0">
+  <section class="relative bg-stone-50 h-screen flex flex-col scroll-hidden">
+    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0 ">
       <!-- Заголовок и кнопки -->
       <div class="flex flex-col md:flex-row max-md:gap-3 items-center justify-between mb-5 py-5">
         <div class="flex items-center w-[400px]">
@@ -49,12 +49,7 @@
             </div>
           </div>
 
-          <button
-            @click="showModal = true"
-            class="py-2.5 pr-7 pl-5 bg-indigo-600 rounded-xl flex items-center gap-2 text-base font-semibold text-white transition-all duration-300 hover:bg-indigo-700"
-          >
-            New Booking
-          </button>
+
         </div>
       </div>
 
@@ -101,8 +96,8 @@
                   @mouseout="hideTooltip"
                 >
                   <div class="text-xs font-normal text-gray-900">
-                    {{ booking.customers[0].name }}
-                  </div>
+  {{ booking.customers?.[0]?.name || 'No customer' }}
+</div>
                   <div class="text-xs font-semibold space-y-1">
                     <div
                       v-if="isCheckIn(booking, day.dateObj)"

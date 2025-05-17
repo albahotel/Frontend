@@ -1,28 +1,32 @@
-<!-- Dashboard.vue -->
-<template >
-  <div class="dashboard flex  min-h-screen h-screen max-h-screen overflow-hidden">
-    <!-- Основной блок с календарем -->
-    <div class="w-9/12 flex flex-col overflow-hidden">
-      <div class="flex-1 overflow-y-auto">
-        <BookingCalendar
-          :level="1"
-          :start-date="currentWeek.start"
-          :end-date="currentWeek.end"
-          @new-booking="handleNewBooking"
-          @change-week="handleWeekChange"
-        />
-      </div>
-    </div>
+<template>
+  <div class="dashboard flex flex-col h-screen">
+    <!-- Хедер (фиксированная высота) -->
+    <Header class="h-16 shrink-0" />
 
-    <!-- Блок уведомлений -->
-    <Notifications />
+    <!-- Основной контент (занимает оставшееся пространство) -->
+    <div class="flex-1 flex overflow-hidden ">
+      <!-- Блок с календарем (75% ширины) -->
+      <div class="w-9/12 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto">
+          <BookingCalendar
+            :level="1"
+            :start-date="currentWeek.start"
+            :end-date="currentWeek.end"
+            @new-booking="handleNewBooking"
+            @change-week="handleWeekChange"
+          />
+        </div>
+      </div>
+
+      <!-- Блок уведомлений (25% ширины) -->
+      <Notifications class="flex-1 overflow-y-auto" />
+    </div>
   </div>
 </template>
 
-
-
 <script setup>
 import { ref, computed } from 'vue'
+import Header from '@/components/Header.vue'
 import BookingCalendar from '@/components/BookingCalendar.vue'
 import Notifications from '@/components/Notifications.vue'
 
@@ -51,3 +55,9 @@ const handleNewBooking = () => {
   console.log('Обработка новой брони')
 }
 </script>
+
+<style scoped>
+.dashboard {
+  height: 100vh;
+}
+</style>
