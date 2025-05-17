@@ -1,7 +1,8 @@
 <template>
-  <section class="relative bg-stone-50 py-24">
-    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 overflow-x-auto">
-      <div class="flex flex-col md:flex-row max-md:gap-3 items-center justify-between mb-5">
+  <section class="relative bg-stone-50 h-screen flex flex-col"> <!-- Изменено -->
+    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0"> <!-- Изменено -->
+      <!-- Заголовок и кнопки -->
+      <div class="flex flex-col md:flex-row max-md:gap-3 items-center justify-between mb-5 py-5">
         <div class="flex items-center w-[400px]"> <!-- Фиксированная ширина контейнера -->
   <!-- Левая кнопка -->
   <button
@@ -133,6 +134,8 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
 
+const server_host = 'http://10.65.158.59:8000'
+
 const props = defineProps({
   level: {
     type: Number,
@@ -237,10 +240,10 @@ onMounted(async () => {
 
 const loadCalendarData = async () => {
   const [roomsRes, bookingsRes] = await Promise.all([
-    axios.get('http://192.168.0.131:8000/api/room', {
+    axios.get(server_host + '/api/room', {
       params: { level: props.level },
     }),
-    axios.get('http://192.168.0.131:8000/api/booking', {
+    axios.get(server_host + '/api/booking', {
       params: {
         level: props.level,
         start_date: props.startDate,
@@ -261,5 +264,38 @@ const loadCalendarData = async () => {
   min-width: 100px;
   max-width: 100px;
   z-index: 10;
+}
+.relative.bg-stone-50 {
+  min-height: 100vh;
+}
+
+.flex-1.min-h-0 {
+  min-height: 0;
+}
+
+/* Для sticky-заголовков */
+thead th {
+  position: sticky;
+  top: 0;
+  background: #fafaf9;
+  z-index: 20;
+}
+
+.sticky.left-0 {
+  left: 0;
+  z-index: 30;
+}
+
+/* Скролл таблицы */
+tbody {
+  display: block;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+}
+
+thead, tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 </style>
