@@ -1,6 +1,6 @@
 <template>
   <section class="relative bg-stone-50 h-screen flex flex-col scroll-hidden">
-    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0 ">
+    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0">
       <!-- Заголовок и кнопки -->
       <div class="flex flex-col md:flex-row max-md:gap-3 items-center justify-between mb-5 py-5">
         <div class="flex items-center w-[400px]">
@@ -37,19 +37,19 @@
               v-model="selectedLevel"
               class="py-2 pl-3 pr-8 bg-white border rounded-lg text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
             >
-              <option disabled value="">Выберите этаж</option>
+              <option disabled value="">Choose level</option>
               <option v-for="level in availableLevels" :key="level" :value="level">
-                Этаж {{ level }}
+                Level {{ level }}
               </option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                <path
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                />
               </svg>
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -76,7 +76,9 @@
           </thead>
 
           <!-- Тело таблицы -->
-          <tbody class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-300 hover:scrollbar-thumb-slate-400">
+          <tbody
+            class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-300 hover:scrollbar-thumb-slate-400"
+          >
             <tr v-for="room in rooms" :key="room.id">
               <td
                 class="sticky left-0 bg-stone-50 border-t border-r border-gray-200 p-3.5 font-medium text-gray-900 z-10"
@@ -96,8 +98,8 @@
                   @mouseout="hideTooltip"
                 >
                   <div class="text-xs font-normal text-gray-900">
-  {{ booking.customers?.[0]?.name || 'No customer' }}
-</div>
+                    {{ booking.customers?.[0]?.name || 'No customer' }}
+                  </div>
                   <div class="text-xs font-semibold space-y-1">
                     <div
                       v-if="isCheckIn(booking, day.dateObj)"
@@ -126,7 +128,11 @@
         :style="{ top: tooltipTop + 'px', left: tooltipLeft + 'px' }"
       >
         <ul>
-          <li v-for="customer in currentBooking.customers" :key="customer.id" class="text-sm text-gray-700">
+          <li
+            v-for="customer in currentBooking.customers"
+            :key="customer.id"
+            class="text-sm text-gray-700"
+          >
             {{ customer.name }}
           </li>
         </ul>
@@ -143,7 +149,7 @@ const server_host = 'http://10.65.158.59:8000'
 
 const props = defineProps({
   startDate: { type: String, required: true },
-  endDate: { type: String, required: true }
+  endDate: { type: String, required: true },
 })
 
 const emit = defineEmits(['change-week'])
@@ -168,9 +174,9 @@ const loadCalendarData = async () => {
       params: {
         level: selectedLevel.value,
         start_date: props.startDate,
-        end_date: props.endDate
-      }
-    })
+        end_date: props.endDate,
+      },
+    }),
   ])
 
   rooms.value = roomsRes.data
@@ -318,7 +324,8 @@ tbody {
   max-height: calc(100vh - 200px);
 }
 
-thead, tbody tr {
+thead,
+tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
@@ -342,7 +349,7 @@ thead, tbody tr {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -383,7 +390,7 @@ tbody {
   position: fixed;
   z-index: 100;
   background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 10px;
   border-radius: 4px;
   pointer-events: none;

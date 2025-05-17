@@ -4,7 +4,7 @@
     <Header class="h-16 shrink-0" />
 
     <!-- Основной контент (занимает оставшееся пространство) -->
-    <div class="flex-1 flex overflow-hidden ">
+    <div class="flex-1 flex overflow-hidden">
       <!-- Блок с календарем (75% ширины) -->
       <div class="w-9/12 flex flex-col overflow-hidden">
         <div class="flex-1 overflow-y-auto">

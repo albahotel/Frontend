@@ -1,10 +1,10 @@
 <template>
-  <header class="bg-white shadow-sm">
+  <header class="bg-stone-50 shadow-sm">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">
         <!-- Логотип -->
-        <router-link 
-          to="/dashboard" 
+        <router-link
+          to="/dashboard"
           class="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
         >
           AlbaHotel
@@ -19,7 +19,7 @@
           >
             Dashboard
           </router-link>
-          
+
           <router-link
             to="/add_booking"
             active-class="border-b-2 border-indigo-600 text-indigo-600"
