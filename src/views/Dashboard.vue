@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard ">
     <BookingCalendar
       :level="1"
       :start-date="currentWeek.start"
