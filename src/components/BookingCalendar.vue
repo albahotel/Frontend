@@ -44,14 +44,16 @@
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                <path
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                />
               </svg>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="relative flex-1" style="margin-bottom: 30px;">
+      <div class="relative flex-1" style="margin-bottom: 30px">
         <div class="h-full pb-8">
           <!-- Заголовки дней -->
           <table class="w-full border-collapse">
@@ -76,7 +78,7 @@
 
             <!-- Тело таблицы -->
             <tbody class="block overflow-auto h-[calc(100%-60px)] pb-[60px]">
-              <tr v-for="room in rooms" :key="room.id">
+              <tr v-for="room in rooms" :key="room.number">
                 <td
                   class="sticky left-0 bg-stone-50 border-t border-r border-gray-200 p-3.5 font-medium text-gray-900 z-10"
                 >
@@ -127,7 +129,11 @@
         :style="{ top: tooltipTop + 'px', left: tooltipLeft + 'px' }"
       >
         <ul>
-          <li v-for="customer in currentBooking.customers" :key="customer.id" class="text-sm text-gray-700">
+          <li
+            v-for="customer in currentBooking.customers"
+            :key="customer.id"
+            class="text-sm text-gray-700"
+          >
             {{ customer.name }}
           </li>
         </ul>
@@ -141,28 +147,32 @@
         @click.stop
       >
         <ul>
-
-          <li
-            class="context-menu-item"
-            @click="handleMenuAction('qr-code')"
-          >
-            QR-код
-          </li>
+          <li class="context-menu-item" @click="handleMenuAction('qr-code')">QR-код</li>
         </ul>
       </div>
     </div>
   </section>
+  <QrModal 
+    :visible="showQrModal"
+    :qr-data="qrData"
+    @close="showQrModal = false"
+  />
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
+import QrModal from '@/components/QRModal.vue'
+
+const showQrModal = ref(false)
+const qrData = ref(null)
+const currentBookingId = ref(null)
 
 const server_host = 'http://192.168.0.131:8000'
 
 const props = defineProps({
   startDate: { type: String, required: true },
-  endDate: { type: String, required: true }
+  endDate: { type: String, required: true },
 })
 
 const emit = defineEmits(['change-week'])
@@ -195,12 +205,12 @@ const loadCalendarData = async () => {
       params: {
         level: selectedLevel.value,
         start_date: props.startDate,
-        end_date: props.endDate
-      }
-    })
+        end_date: props.endDate,
+      },
+    }),
   ])
 
-  rooms.value = roomsRes.data
+  rooms.value = roomsRes.data.sort((a, b) => a.number - b.number);
   bookings.value = bookingsRes.data
 }
 
@@ -302,11 +312,16 @@ const hideContextMenu = () => {
   contextMenu.value.visible = false
 }
 
-const handleMenuAction = (action) => {
-  if (action === 'residents') {
-    console.log('Показать жильцов для брони:', contextMenu.value.booking)
-  } else if (action === 'qr-code') {
-    console.log('Показать QR-код для брони:', contextMenu.value.booking)
+const handleMenuAction = async (action) => {
+  if (action === 'qr-code') {
+    try {
+      currentBookingId.value = contextMenu.value.booking.id
+      const response = await axios.get(`${server_host}/api/auth/mobile_token`, { params: { id: currentBookingId.value } })
+      qrData.value = response.data
+      showQrModal.value = true
+    } catch (error) {
+      console.error('Ошибка при получении QR-кода:', error)
+    }
   }
   hideContextMenu()
 }
@@ -497,7 +512,7 @@ tbody tr {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -538,7 +553,7 @@ tbody {
   position: fixed;
   z-index: 100;
   background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 10px;
   border-radius: 4px;
   pointer-events: none;
@@ -550,7 +565,7 @@ tbody {
   position: fixed;
   z-index: 200; /* Поверх всех элементов */
   background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   padding: 5px 0;
   min-width: 120px;

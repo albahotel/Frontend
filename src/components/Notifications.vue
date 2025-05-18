@@ -11,9 +11,7 @@
       <!-- Состояния загрузки и ошибок -->
       <div v-if="loading" class="text-gray-500">Loading...</div>
       <div v-else-if="error" class="text-red-500">{{ error }}</div>
-      <div v-if="is_empty === 1" class="text-center text-gray-500 py-6">
-        No notifications
-      </div>
+      <div v-if="is_empty === 1" class="text-center text-gray-500 py-6">No notifications</div>
       <!-- Список уведомлений -->
       <div class="flex-1 min-h-0 overflow-y-auto">
         <div

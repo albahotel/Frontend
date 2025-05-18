@@ -7,9 +7,10 @@
     <div class="flex-1 flex overflow-hidden bg-gray-50">
       <!-- Блок с календарем -->
       <div class="w-9/12 flex flex-col overflow-hidden pr-4 pl-6 py-4">
-        <div class="h-[calc(100vh-112px)]"> <!-- Измененная строка -->
+        <div class="h-[calc(100vh-112px)]">
+          <!-- Измененная строка -->
           <BookingCalendar
-            class="h-full" 
+            class="h-full"
             :level="1"
             :start-date="currentWeek.start"
             :end-date="currentWeek.end"

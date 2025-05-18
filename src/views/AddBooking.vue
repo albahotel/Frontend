@@ -1,5 +1,4 @@
 <template>
-
   <div class="min-h-screen bg-stone-50">
     <Header />
     <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -135,7 +134,6 @@
 </template>
 
 <script setup>
-
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import Header from '@/components/Header.vue'
