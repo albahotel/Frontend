@@ -3,12 +3,13 @@
     <!-- Хедер (фиксированная высота) -->
     <Header class="h-16 shrink-0" />
 
-    <!-- Основной контент (занимает оставшееся пространство) -->
-    <div class="flex-1 flex overflow-hidden">
-      <!-- Блок с календарем (75% ширины) -->
-      <div class="w-9/12 flex flex-col overflow-hidden">
-        <div class="flex-1 overflow-y-auto">
+    <!-- Основной контент -->
+    <div class="flex-1 flex overflow-hidden bg-gray-50">
+      <!-- Блок с календарем -->
+      <div class="w-9/12 flex flex-col overflow-hidden pr-4 pl-6 py-4">
+        <div class="h-[calc(100vh-112px)]"> <!-- Измененная строка -->
           <BookingCalendar
+            class="h-full" 
             :level="1"
             :start-date="currentWeek.start"
             :end-date="currentWeek.end"
@@ -18,7 +19,7 @@
         </div>
       </div>
 
-      <!-- Блок уведомлений (25% ширины) -->
+      <!-- Блок уведомлений -->
       <Notifications class="flex-1 overflow-y-auto" />
     </div>
   </div>

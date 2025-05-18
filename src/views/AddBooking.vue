@@ -1,8 +1,10 @@
 <template>
+
   <div class="min-h-screen bg-stone-50">
     <Header />
     <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 class="text-3xl font-bold text-gray-900 mb-8">New Booking</h1>
+      <!-- Контент формы будет добавлен позже -->
 
       <!-- Шаг 1: Выбор дат и гостей -->
       <div v-if="step === 1" class="bg-white p-6 rounded-lg shadow-sm">
@@ -133,11 +135,12 @@
 </template>
 
 <script setup>
+
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import Header from '@/components/Header.vue'
 
-const API_HOST = 'http://10.65.158.59:8000'
+const API_HOST = 'http://192.168.0.131:8000'
 
 const step = ref(1)
 const dateIn = ref('')

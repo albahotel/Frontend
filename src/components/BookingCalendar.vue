@@ -1,6 +1,6 @@
 <template>
-  <section class="relative bg-stone-50 h-screen flex flex-col scroll-hidden">
-    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0">
+  <section class="h-full relative bg-stone-50 flex flex-col">
+    <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex-1 flex flex-col min-h-0 pb-[30px]">
       <!-- Заголовок и кнопки -->
       <div class="flex flex-col md:flex-row max-md:gap-3 items-center justify-between mb-5 py-5">
         <div class="flex items-center w-[400px]">
@@ -30,95 +30,94 @@
           </button>
         </div>
 
-        <!-- Блок выбора этажа и кнопки -->
+        <!-- Блок выбора этажа -->
         <div class="flex items-center gap-4">
           <div class="relative">
             <select
               v-model="selectedLevel"
               class="py-2 pl-3 pr-8 bg-white border rounded-lg text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
             >
-              <option disabled value="">Choose level</option>
+              <option disabled value="">Выберите этаж</option>
               <option v-for="level in availableLevels" :key="level" :value="level">
-                Level {{ level }}
+                Этаж {{ level }}
               </option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                <path
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                />
+                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
               </svg>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="relative">
-        <!-- Заголовки дней -->
-        <table class="w-full border-collapse">
-          <thead>
-            <tr>
-              <th
-                class="sticky left-0 bg-stone-50 border-t border-gray-200 p-3.5 text-sm font-medium text-gray-900 text-left z-10"
-              >
-                Room
-              </th>
-              <th
-                v-for="day in weekDays"
-                :key="day.date"
-                class="border-t border-gray-200 p-3.5 text-sm font-medium text-center"
-                :class="{ 'text-indigo-600': isToday(day.dateObj) }"
-              >
-                {{ day.label }}<br />
-                <span class="text-sm text-gray-500">{{ day.date.split('-')[2] }}</span>
-              </th>
-            </tr>
-          </thead>
-
-          <!-- Тело таблицы -->
-          <tbody
-            class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-300 hover:scrollbar-thumb-slate-400"
-          >
-            <tr v-for="room in rooms" :key="room.id">
-              <td
-                class="sticky left-0 bg-stone-50 border-t border-r border-gray-200 p-3.5 font-medium text-gray-900 z-10"
-              >
-                №{{ room.number }}
-              </td>
-              <td
-                v-for="day in weekDays"
-                :key="day.date"
-                class="border-t border-r border-gray-200 p-1.5 align-top"
-              >
-                <div
-                  v-for="booking in getBookingsForCell(room.number, day.dateObj)"
-                  :key="booking.id"
-                  class="rounded p-1.5 border-l-2 border-green-600 bg-green-50 mb-1 booking-block"
-                  @mouseover="showTooltip(booking, $event)"
-                  @mouseout="hideTooltip"
+      <div class="relative flex-1" style="margin-bottom: 30px;">
+        <div class="h-full pb-8">
+          <!-- Заголовки дней -->
+          <table class="w-full border-collapse">
+            <thead>
+              <tr>
+                <th
+                  class="sticky left-0 bg-stone-50 border-t border-gray-200 p-3.5 text-sm font-medium text-gray-900 text-left z-10"
                 >
-                  <div class="text-xs font-normal text-gray-900">
-                    {{ booking.customers?.[0]?.name || 'No customer' }}
-                  </div>
-                  <div class="text-xs font-semibold space-y-1">
-                    <div
-                      v-if="isCheckIn(booking, day.dateObj)"
-                      class="flex items-center gap-1 text-green-600"
-                    >
-                      <span class="text-[10px]">↑</span> {{ formatDate(booking.date_in) }}
+                  Room
+                </th>
+                <th
+                  v-for="day in weekDays"
+                  :key="day.date"
+                  class="border-t border-gray-200 p-3.5 text-sm font-medium text-center"
+                  :class="{ 'text-indigo-600': isToday(day.dateObj) }"
+                >
+                  {{ day.label }}<br />
+                  <span class="text-sm text-gray-500">{{ day.date.split('-')[2] }}</span>
+                </th>
+              </tr>
+            </thead>
+
+            <!-- Тело таблицы -->
+            <tbody class="block overflow-auto h-[calc(100%-60px)] pb-[60px]">
+              <tr v-for="room in rooms" :key="room.id">
+                <td
+                  class="sticky left-0 bg-stone-50 border-t border-r border-gray-200 p-3.5 font-medium text-gray-900 z-10"
+                >
+                  №{{ room.number }}
+                </td>
+                <td
+                  v-for="day in weekDays"
+                  :key="day.date"
+                  class="border-t border-r border-gray-200 p-1.5 align-top"
+                >
+                  <div
+                    v-for="booking in getBookingsForCell(room.number, day.dateObj)"
+                    :key="booking.id"
+                    class="rounded p-1.5 border-l-2 border-green-600 bg-green-50 mb-1 booking-block"
+                    @mouseover="showTooltip(booking, $event)"
+                    @mouseout="hideTooltip"
+                    @click="showContextMenu(booking, $event)"
+                  >
+                    <div class="text-xs font-normal text-gray-900">
+                      {{ booking.customers?.[0]?.name || 'No customer' }}
                     </div>
-                    <div
-                      v-if="isCheckOut(booking, day.dateObj)"
-                      class="flex items-center gap-1 text-red-600"
-                    >
-                      <span class="text-[10px]">↓</span> {{ formatDate(booking.date_out) }}
+                    <div class="text-xs font-semibold space-y-1">
+                      <div
+                        v-if="isCheckIn(booking, day.dateObj)"
+                        class="flex items-center gap-1 text-green-600"
+                      >
+                        <span class="text-[10px]">↑</span> {{ formatDate(booking.date_in) }}
+                      </div>
+                      <div
+                        v-if="isCheckOut(booking, day.dateObj)"
+                        class="flex items-center gap-1 text-red-600"
+                      >
+                        <span class="text-[10px]">↓</span> {{ formatDate(booking.date_out) }}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Tooltip для списка клиентов -->
@@ -128,12 +127,26 @@
         :style="{ top: tooltipTop + 'px', left: tooltipLeft + 'px' }"
       >
         <ul>
-          <li
-            v-for="customer in currentBooking.customers"
-            :key="customer.id"
-            class="text-sm text-gray-700"
-          >
+          <li v-for="customer in currentBooking.customers" :key="customer.id" class="text-sm text-gray-700">
             {{ customer.name }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Контекстное меню -->
+      <div
+        v-if="contextMenu.visible"
+        class="context-menu"
+        :style="{ top: contextMenu.top + 'px', left: contextMenu.left + 'px' }"
+        @click.stop
+      >
+        <ul>
+
+          <li
+            class="context-menu-item"
+            @click="handleMenuAction('qr-code')"
+          >
+            QR-код
           </li>
         </ul>
       </div>
@@ -145,11 +158,11 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
 
-const server_host = 'http://10.65.158.59:8000'
+const server_host = 'http://192.168.0.131:8000'
 
 const props = defineProps({
   startDate: { type: String, required: true },
-  endDate: { type: String, required: true },
+  endDate: { type: String, required: true }
 })
 
 const emit = defineEmits(['change-week'])
@@ -166,6 +179,14 @@ const currentBooking = ref(null)
 const tooltipTop = ref(0)
 const tooltipLeft = ref(0)
 
+// Состояние контекстного меню
+const contextMenu = ref({
+  visible: false,
+  booking: null,
+  top: 0,
+  left: 0,
+})
+
 // Загрузка данных
 const loadCalendarData = async () => {
   const [roomsRes, bookingsRes] = await Promise.all([
@@ -174,9 +195,9 @@ const loadCalendarData = async () => {
       params: {
         level: selectedLevel.value,
         start_date: props.startDate,
-        end_date: props.endDate,
-      },
-    }),
+        end_date: props.endDate
+      }
+    })
   ])
 
   rooms.value = roomsRes.data
@@ -266,6 +287,37 @@ const hideTooltip = () => {
   currentBooking.value = null
 }
 
+// Обработчики для контекстного меню
+const showContextMenu = (booking, event) => {
+  event.stopPropagation() // Предотвращаем всплытие события
+  contextMenu.value = {
+    visible: true,
+    booking: booking,
+    top: event.clientY,
+    left: event.clientX,
+  }
+}
+
+const hideContextMenu = () => {
+  contextMenu.value.visible = false
+}
+
+const handleMenuAction = (action) => {
+  if (action === 'residents') {
+    console.log('Показать жильцов для брони:', contextMenu.value.booking)
+  } else if (action === 'qr-code') {
+    console.log('Показать QR-код для брони:', contextMenu.value.booking)
+  }
+  hideContextMenu()
+}
+
+// Закрытие меню при клике вне его
+onMounted(() => {
+  window.addEventListener('click', hideContextMenu)
+  generateWeekDays()
+  loadCalendarData()
+})
+
 // Обновляем дни при изменении пропсов
 watch(
   () => [props.startDate, props.endDate],
@@ -273,14 +325,110 @@ watch(
     generateWeekDays()
   },
 )
-
-onMounted(async () => {
-  generateWeekDays()
-  await loadCalendarData()
-})
 </script>
 
 <style>
+.relative.bg-stone-50 {
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+.table-container {
+  flex: 1;
+  min-height: 0;
+}
+
+tbody {
+  display: block;
+  overflow-y: auto;
+  height: calc(100vh - 260px);
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.sticky.left-0 {
+  position: sticky;
+  left: 0;
+  background: #fafaf9;
+  z-index: 30;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #fafaf9;
+  z-index: 20;
+}
+
+.relative.bg-stone-50 {
+  height: calc(100vh - 60px);
+}
+
+tbody {
+  display: block;
+  overflow-y: auto;
+  padding-bottom: 60px;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.sticky.left-0 {
+  position: sticky;
+  left: 0;
+  background: #fafaf9;
+  z-index: 30;
+  height: 40px;
+}
+
+tbody {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.relative.bg-stone-50 {
+  height: calc(100vh - 60px);
+}
+
+tbody {
+  display: block;
+  overflow-y: auto;
+  max-height: calc(90vh - 100px);
+  padding-bottom: 30px;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.sticky.left-0 {
+  position: sticky;
+  left: 0;
+  background: #fafaf9;
+  z-index: 30;
+}
+
+.sticky.left-0 {
+  position: sticky;
+  left: 0;
+  background: #fafaf9;
+  z-index: 30;
+}
+
 select {
   background-image: none;
   padding-right: 2.5rem;
@@ -349,7 +497,7 @@ tbody tr {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
-  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.1);
 }
 
 * {
@@ -390,10 +538,39 @@ tbody {
   position: fixed;
   z-index: 100;
   background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 10px;
   border-radius: 4px;
   pointer-events: none;
   max-width: 200px;
+}
+
+/* Стили для контекстного меню */
+.context-menu {
+  position: fixed;
+  z-index: 200; /* Поверх всех элементов */
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 4px;
+  padding: 5px 0;
+  min-width: 120px;
+}
+
+.context-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.context-menu-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+  background-color: #f1f5f9;
 }
 </style>

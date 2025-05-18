@@ -56,8 +56,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 
-const API_HOST = 'http://10.65.158.59:8000'
-const WS_HOST = 'ws://10.65.158.59:8000'
+const API_HOST = 'http://192.168.0.131:8000'
+const WS_HOST = 'ws://192.168.0.131:8000'
 
 const notifications = ref([])
 const loading = ref(true)

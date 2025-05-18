@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '@/views/Dashboard.vue'
+import Login from '@/views/Login.vue'
 import AddBooking from '@/views/AddBooking.vue'
 
 const routes = [
+  { path: '/login', name: 'Login', component: Login },
   {
     path: '/dashboard',
     name: 'Dashboard',
